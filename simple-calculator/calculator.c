@@ -11,6 +11,12 @@ int add(int a, int b)
 	return (a + b);
 }
 
+int sub(int a, int b)
+{
+	return (a - b);
+}
+
+
 /**
  * main - Entry point for the simple calculator program
  * Return: Always 0 (Success)
@@ -50,6 +56,16 @@ int main(void)
 				scanf("%d", &b);
 				
 				result = add(a, b);
+				printf("Result: %d\n", result);
+				break;
+				
+			case 2:
+				printf("A: ");
+				scanf("%d", &a);
+				printf("B: ");
+				scanf("%d", &b);
+				
+				result = sub(a, b);
 				printf("Result: %d\n", result);
 				break;
 			
