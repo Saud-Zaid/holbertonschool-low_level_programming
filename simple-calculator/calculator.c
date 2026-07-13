@@ -34,6 +34,17 @@ int mul(int a, int b)
 }
 
 /**
+ * div_op - Divides first integer by the second
+ * @a: First integer (numerator)
+ * @b: Second integer (denominator)
+ * Return: Floating point result of division
+ */
+double div_op(int a, int b)
+{
+	return ((double)a / b);
+}
+
+/**
  * main - Entry point for the simple calculator program
  * Return: Always 0 (Success)
  */
@@ -62,7 +73,6 @@ int main(void)
 		}
 		else
 		{
-			/* نقرأ المدخلات مرة واحدة هنا لأن الخيار صحيح بين 1 و 4 */
 			printf("A: ");
 			scanf("%d", &a);
 			printf("B: ");
@@ -83,6 +93,18 @@ int main(void)
 			case 3:
 				result = mul(a, b);
 				printf("Result: %d\n", result);
+				break;
+
+			case 4:
+				if (b == 0)
+				{
+					printf("Error: division by zero\n");
+				}
+				else
+				{
+					/* استخدام %g أو %.1f للطباعة العشري الذكية */
+					printf("Result: %g\n", div_op(a, b));
+				}
 				break;
 			
 			default:
