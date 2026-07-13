@@ -11,11 +11,27 @@ int add(int a, int b)
 	return (a + b);
 }
 
+/**
+ * sub - Subtracts second integer from the first
+ * @a: First integer
+ * @b: Second integer
+ * Return: Difference of a and b
+ */
 int sub(int a, int b)
 {
 	return (a - b);
 }
 
+/**
+ * mul - Multiplies two integers
+ * @a: First integer
+ * @b: Second integer
+ * Return: Product of a and b
+ */
+int mul(int a, int b)
+{
+	return (a * b);
+}
 
 /**
  * main - Entry point for the simple calculator program
@@ -46,26 +62,26 @@ int main(void)
 		}
 		else
 		{
-			/* ننفذ العمليات فقط إذا كان الخيار صحيحاً بين 1 و 4 */
+			/* نقرأ المدخلات مرة واحدة هنا لأن الخيار صحيح بين 1 و 4 */
+			printf("A: ");
+			scanf("%d", &a);
+			printf("B: ");
+			scanf("%d", &b);
+
 			switch (choice)
 			{
 			case 1:
-				printf("A: ");
-				scanf("%d", &a);
-				printf("B: ");
-				scanf("%d", &b);
-				
 				result = add(a, b);
 				printf("Result: %d\n", result);
 				break;
 				
 			case 2:
-				printf("A: ");
-				scanf("%d", &a);
-				printf("B: ");
-				scanf("%d", &b);
-				
 				result = sub(a, b);
+				printf("Result: %d\n", result);
+				break;
+
+			case 3:
+				result = mul(a, b);
 				printf("Result: %d\n", result);
 				break;
 			
