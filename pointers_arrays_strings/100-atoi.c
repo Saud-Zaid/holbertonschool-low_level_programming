@@ -13,7 +13,7 @@ int _atoi(char *s)
 	int res = 0;
 	int found_num = 0;
 
-	while (s[s] != '\0' && s[i] != '\0')
+	while (s[i] != '\0')
 	{
 		if (s[i] == '-')
 		{
@@ -37,7 +37,7 @@ int _atoi(char *s)
 	{
 		return (-res);
 	}
-	
+
 	/* إذا كانت سالبة، نعيد القيمة السالبة كما هي */
 	return (res);
 }
