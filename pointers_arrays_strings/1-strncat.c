@@ -1,10 +1,10 @@
 #include "main.h"
 
 /**
- * _strncat - concatenates two strings using at most n bytes
+ * _strncat - concatenates two strings
  * @dest: destination string
  * @src: source string
- * @n: maximum number of bytes to use from src
+ * @n: max bytes to use
  *
  * Return: pointer to dest
  */
@@ -19,7 +19,7 @@ char *_strncat(char *dest, char *src, int n)
 		i++;
 	}
 
-	/* نسخ النص الثاني بشرط عدم تجاوز نهاية النص أو العدد n */
+	/* النسخ بشرط عدم تجاوز n */
 	while (src[j] != '\0' && j < n)
 	{
 		dest[i] = src[j];
