@@ -1,5 +1,4 @@
 #include "function_pointers.h"
-#include <stdlib.size_t>
 
 /**
  * print_name - Prints a name using a given function pointer.
