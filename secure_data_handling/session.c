@@ -3,7 +3,7 @@
 #include "session.h"
 
 /**
- * session_create - Creates a new session with independent heap-allocated copies
+ * session_create - Creates a new session
  * @id: Session identifier string
  * @data: Initial binary payload/data
  * @data_len: Length of the payload in bytes
