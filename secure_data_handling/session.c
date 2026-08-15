@@ -3,21 +3,23 @@
 #include "session.h"
 
 /**
- * session_create - Creates a new session
+ * session_create - Creates a new session with dedicated memory
  * @id: Session identifier string
- * @data: Initial binary payload/data
- * @data_len: Length of the payload in bytes
+ * @uid: User ID
+ * @data: Initial payload buffer
+ * @data_len: Length of payload buffer
  *
- * Return: Pointer to the new session_t, or NULL on failure.
+ * Return: Pointer to session_t, or NULL on failure
  */
-session_t *session_create(const char *id, const void *data, size_t data_len)
+session_t *session_create(const char *id, unsigned int uid,
+			  const unsigned char *data, size_t data_len)
 {
 	session_t *s;
 
 	if (id == NULL)
 		return (NULL);
 
-	s = malloc(sizeof(session_t));
+	s = malloc(sizeof(*s));
 	if (s == NULL)
 		return (NULL);
 
@@ -27,6 +29,8 @@ session_t *session_create(const char *id, const void *data, size_t data_len)
 		free(s);
 		return (NULL);
 	}
+
+	s->uid = uid;
 
 	if (data != NULL && data_len > 0)
 	{
@@ -50,44 +54,43 @@ session_t *session_create(const char *id, const void *data, size_t data_len)
 }
 
 /**
- * session_update_data - Safely updates the session payload buffer
+ * session_set_data - Safely updates session data
  * @s: Pointer to session
- * @data: New payload
- * @data_len: Length of new payload
+ * @data: New data buffer
+ * @data_len: Length of new data buffer
  *
- * Return: 0 on success, -1 on failure.
+ * Return: 1 on success, 0 on failure
  */
-int session_update_data(session_t *s, const void *data, size_t data_len)
+int session_set_data(session_t *s, const unsigned char *data, size_t data_len)
 {
-	void *new_data;
+	unsigned char *tmp;
 
 	if (s == NULL)
-		return (-1);
+		return (0);
 
 	if (data == NULL || data_len == 0)
 	{
 		free(s->data);
 		s->data = NULL;
 		s->data_len = 0;
-		return (0);
+		return (1);
 	}
 
-	new_data = malloc(data_len);
-	if (new_data == NULL)
-		return (-1);
+	tmp = malloc(data_len);
+	if (tmp == NULL)
+		return (0);
 
-	memcpy(new_data, data, data_len);
-
+	memcpy(tmp, data, data_len);
 	free(s->data);
-	s->data = new_data;
+	s->data = tmp;
 	s->data_len = data_len;
 
-	return (0);
+	return (1);
 }
 
 /**
- * session_destroy - Releases all memory owned by the session
- * @s: Pointer to session to destroy
+ * session_destroy - Destroys and frees all memory owned by session
+ * @s: Pointer to session
  */
 void session_destroy(session_t *s)
 {
@@ -95,11 +98,6 @@ void session_destroy(session_t *s)
 		return;
 
 	free(s->id);
-	s->id = NULL;
-
 	free(s->data);
-	s->data = NULL;
-
-	s->data_len = 0;
 	free(s);
 }
