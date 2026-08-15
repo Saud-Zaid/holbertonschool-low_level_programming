@@ -16,7 +16,6 @@ store_t *store_create(void)
 		return (NULL);
 
 	store->head = NULL;
-	store->count = 0;
 
 	return (store);
 }
@@ -30,7 +29,7 @@ store_t *store_create(void)
  */
 int store_add(store_t *store, session_t *s)
 {
-	store_node_t *curr, *new_node;
+	node_t *curr, *new_node;
 
 	if (store == NULL || s == NULL || s->id == NULL)
 		return (-1);
@@ -44,14 +43,13 @@ int store_add(store_t *store, session_t *s)
 		curr = curr->next;
 	}
 
-	new_node = malloc(sizeof(store_node_t));
+	new_node = malloc(sizeof(node_t));
 	if (new_node == NULL)
 		return (-1);
 
 	new_node->session = s;
 	new_node->next = store->head;
 	store->head = new_node;
-	store->count++;
 
 	return (0);
 }
@@ -63,9 +61,9 @@ int store_add(store_t *store, session_t *s)
  *
  * Return: Pointer to session_t if found, NULL otherwise.
  */
-session_t *store_get(const store_t *store, const char *id)
+session_t *store_get(store_t *store, const char *id)
 {
-	store_node_t *curr;
+	node_t *curr;
 
 	if (store == NULL || id == NULL)
 		return (NULL);
@@ -92,7 +90,7 @@ session_t *store_get(const store_t *store, const char *id)
  */
 int store_delete(store_t *store, const char *id, session_t **out)
 {
-	store_node_t *curr, *prev = NULL;
+	node_t *curr, *prev = NULL;
 
 	if (store == NULL || id == NULL)
 		return (-1);
@@ -114,7 +112,6 @@ int store_delete(store_t *store, const char *id, session_t **out)
 				session_destroy(curr->session);
 
 			free(curr);
-			store->count--;
 			return (0);
 		}
 		prev = curr;
@@ -130,7 +127,7 @@ int store_delete(store_t *store, const char *id, session_t **out)
  */
 void store_clear(store_t *store)
 {
-	store_node_t *curr, *next;
+	node_t *curr, *next;
 
 	if (store == NULL)
 		return;
@@ -146,7 +143,6 @@ void store_clear(store_t *store)
 	}
 
 	store->head = NULL;
-	store->count = 0;
 }
 
 /**
