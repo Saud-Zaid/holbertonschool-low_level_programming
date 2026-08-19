@@ -6,8 +6,8 @@
 #define BUF_SIZE 1024
 
 /**
- * close_fd - closes a file descriptor or exits with error
- * @fd: file descriptor to close
+ * close_fd - Closes a file descriptor or exits with code 100.
+ * @fd: File descriptor to close.
  */
 void close_fd(int fd)
 {
@@ -19,17 +19,48 @@ void close_fd(int fd)
 }
 
 /**
- * main - copies the content of a file to another file
- * @argc: argument count
- * @argv: argument vector
+ * copy_file - Copies content from source fd to destination fd.
+ * @fd_from: Source file descriptor.
+ * @fd_to: Destination file descriptor.
+ * @file_from: Name of the source file.
+ * @file_to: Name of the destination file.
+ */
+void copy_file(int fd_from, int fd_to, char *file_from, char *file_to)
+{
+	ssize_t bytes_read, bytes_written;
+	char buffer[BUF_SIZE];
+
+	while ((bytes_read = read(fd_from, buffer, BUF_SIZE)) > 0)
+	{
+		bytes_written = write(fd_to, buffer, bytes_read);
+		if (bytes_written == -1 || bytes_written != bytes_read)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file_to);
+			close_fd(fd_from);
+			close_fd(fd_to);
+			exit(99);
+		}
+	}
+
+	if (bytes_read == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
+		close_fd(fd_from);
+		close_fd(fd_to);
+		exit(98);
+	}
+}
+
+/**
+ * main - Copies the content of a file to another file.
+ * @argc: Number of arguments.
+ * @argv: Array of argument strings.
  *
- * Return: 0 on success, or exits with specific error codes
+ * Return: 0 on success.
  */
 int main(int argc, char *argv[])
 {
 	int fd_from, fd_to;
-	ssize_t bytes_read, bytes_written;
-	char buffer[BUF_SIZE];
 
 	if (argc != 3)
 	{
@@ -52,25 +83,7 @@ int main(int argc, char *argv[])
 		exit(99);
 	}
 
-	while ((bytes_read = read(fd_from, buffer, BUF_SIZE)) > 0)
-	{
-		bytes_written = write(fd_to, buffer, bytes_read);
-		if (bytes_written == -1 || bytes_written != bytes_read)
-		{
-			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
-			close_fd(fd_from);
-			close_fd(fd_to);
-			exit(99);
-		}
-	}
-
-	if (bytes_read == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-		close_fd(fd_from);
-		close_fd(fd_to);
-		exit(98);
-	}
+	copy_file(fd_from, fd_to, argv[1], argv[2]);
 
 	close_fd(fd_from);
 	close_fd(fd_to);
